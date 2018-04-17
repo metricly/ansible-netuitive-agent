@@ -32,6 +32,10 @@
         -e 's/#\s\(hostname_method\s=\ssmart\)/\1/'
         -e '/[[NetuitiveDockerCollector]]/{n;s/False/True/}' {{ netuitive_conf_file }}
       ignore_errors: yes
+# Start the Netuitive agent
+    - name: Start Netuitive Agent
+      service: enabled=yes state=start name=netuitive-agent
+
 ########## CLEANUP ########################
     - name: remove setup files
       shell: rm -rf /root/setup
