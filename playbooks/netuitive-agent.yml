@@ -7,10 +7,12 @@
   hosts: localhost
   sudo: yes
   vars:
-    netuitive_linux_api: "apikey"
     netuitive_statsd_port: "8125"
     netuitive_listen_ip: "127.0.0.1"
     netuitive_conf_file: "/opt/netuitive-agent/conf/netuitive-agent.conf"
+  vars_prompt:
+    - name: "netuitive_linux_api"
+      prompt: "Enter your API KEY: "
   tasks:
 # Install the Netuitive agent
     - name: Install Netuitive Agent
