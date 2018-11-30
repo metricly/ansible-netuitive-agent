@@ -4,8 +4,8 @@
 
 - name: Netuitive Agent Setup
   gather_facts: false
-  hosts: localhost
   sudo: yes
+  hosts: all
   vars:
     netuitive_statsd_port: "8125"
     netuitive_listen_ip: "127.0.0.1"
