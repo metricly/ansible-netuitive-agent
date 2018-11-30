@@ -40,8 +40,3 @@
       ############ Start the Netuitive agent ############
     - name: Start Netuitive Agent
       service: enabled=yes state=started name=netuitive-agent
-
-      ############ Cleanup ############
-    - name: Remove Setup Files
-      shell: rm -rf /root/setup
-      ignore_errors: yes
