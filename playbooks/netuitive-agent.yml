@@ -39,7 +39,7 @@
 
       ############ Start the Netuitive agent ############
     - name: Start Netuitive Agent
-      service: enabled=yes state=start name=netuitive-agent
+      service: enabled=yes state=started name=netuitive-agent
 
       ############ Cleanup ############
     - name: Remove Setup Files
