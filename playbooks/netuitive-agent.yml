@@ -1,29 +1,36 @@
 ---
-# The playbook installs and configures the Netuitive Agent.
-# - it is necessary to update this playbook with your linux apikey
+# This playbook installs and configures the Netuitive Agent.
+#   - you will be prompted at run for your Linux apikey
+#   - or you can include the apikey on the command line
+#       as an extra variable, using:
+#       "--extra-vars=netuitive_linux_api=<your api key>"
 
 - name: Netuitive Agent Setup
   gather_facts: false
-  hosts: localhost
   sudo: yes
+  hosts: all
   vars:
-    netuitive_linux_api: "apikey"
     netuitive_statsd_port: "8125"
     netuitive_listen_ip: "127.0.0.1"
     netuitive_conf_file: "/opt/netuitive-agent/conf/netuitive-agent.conf"
+  vars_prompt:
+    - name: "netuitive_linux_api"
+      prompt: "Enter your API KEY: "
   tasks:
-# Install the Netuitive agent
+      ############ Install the Netuitive agent ############
     - name: Install Netuitive Agent
       raw: N_APIKEY={{netuitive_linux_api}} bash -c "$(curl -Ls http://repos.app.netuitive.com/linux.sh)"
       ignore_errors: yes
-# Stop the Netuitive agent
+
+      ############ Stop the Netuitive agent ############
     - name: Stop Netuitive Agent
       service: enabled=no state=stopped name=netuitive-agent
-# Configure the Netuitive Agent
-#  - three configurations are made:
-#    1. local statsd server is enabled and configured per above defined vars
-#    2. smart mode is used for hostname resolution
-#    3. NetuitiveDockerCollector is enabled by default
+
+      ############ Configure the Netuitive Agent ############
+      #  - three configurations are made:
+      #    1. local statsd server is enabled and configured per above defined vars
+      #    2. smart mode is used for hostname resolution
+      #    3. NetuitiveDockerCollector is enabled by default
     - name: Configure Netuitive Agent
       command: >
         sed -i -e '/[[[statsd]]]/{n;s/.*\(enabled\s=\s\).*/\1True/}'
@@ -32,7 +39,7 @@
         -e 's/#\s\(hostname_method\s=\ssmart\)/\1/'
         -e '/[[NetuitiveDockerCollector]]/{n;s/False/True/}' {{ netuitive_conf_file }}
       ignore_errors: yes
-########## CLEANUP ########################
-    - name: remove setup files
-      shell: rm -rf /root/setup
-      ignore_errors: yes
+
+      ############ Start the Netuitive agent ############
+    - name: Start Netuitive Agent
+      service: enabled=yes state=started name=netuitive-agent
