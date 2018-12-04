@@ -1,6 +1,9 @@
 ---
-# The playbook installs and configures the Netuitive Agent.
-# - it is necessary to update this playbook with your linux apikey
+# This playbook installs and configures the Netuitive Agent.
+#   - you will be prompted at run for your Linux apikey
+#   - or you can include the apikey on the command line
+#       as an extra variable, using:
+#       "--extra-vars=netuitive_linux_api=<your api key>"
 
 - name: Netuitive Agent Setup
   gather_facts: false
